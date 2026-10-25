@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ficha de Tormenta 20</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--pg:#ebe4d4;--card:#faf6ec;--ink:#1d1818;--red:#9e1f26;--mute:#7a6f66}
+*{box-sizing:border-box}
+body{margin:0;background:var(--pg);color:var(--ink);font:15px/1.35 "Source Sans 3",system-ui,sans-serif}
+h1,h2{font-family:Cinzel,Georgia,serif;margin:0}
+header{background:var(--ink);color:#fff;padding:12px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+header h1{font-size:24px;font-weight:800;letter-spacing:.04em}header h1 b{color:#ff5a4d}
+header div{display:flex;gap:6px;flex-wrap:wrap}
+button,.btn{font:inherit;background:var(--red);color:#fff;border:0;border-radius:3px;padding:6px 12px;cursor:pointer}
+button.ghost,.btn{background:transparent;border:1px solid #fff8}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--red);outline-offset:1px}
+.main{max-width:1100px;margin:0 auto;padding:14px;display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:900px){.main{grid-template-columns:1.25fr 1fr;align-items:start}}
+.col{display:grid;gap:14px}
+section{background:var(--card);border:2px solid var(--ink);border-radius:4px;box-shadow:4px 4px 0 var(--red)}
+section>h2{background:var(--red);color:#fff;font-size:14px;letter-spacing:.06em;padding:4px 10px}
+.in{padding:10px}
+input,select,textarea{font:inherit;color:var(--ink);background:#fff;border:1px solid #bbb0a2;border-radius:3px;padding:4px 6px;width:100%;min-width:0}
+textarea{resize:vertical;min-height:70px}
+label{display:block;font-size:12px;color:var(--mute)}
+.g{display:grid;gap:8px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g6{grid-template-columns:repeat(3,1fr)}
+@media(min-width:560px){.g6{grid-template-columns:repeat(6,1fr)}}
+.at{text-align:center}.at input{font:800 26px Cinzel,serif;text-align:center;border:2px solid var(--ink);border-radius:50% 50% 45% 45%;padding:8px 0}
+.at b{font-family:Cinzel,serif;font-size:13px}
+.big{font:800 28px Cinzel,serif;text-align:center}
+.box{border:1px solid #bbb0a2;border-radius:3px;padding:6px;background:#fff;text-align:center}
+.box small{display:block;color:var(--mute);font-size:12px}
+.sk{display:grid;grid-template-columns:22px 1fr 44px 30px 34px 34px 50px;gap:4px;align-items:center;padding:3px 10px;border-bottom:1px solid #e4dccd;font-size:14px}
+.sk:nth-child(even){background:#f3eddf}
+.sk input[type=checkbox]{width:16px;height:16px;accent-color:var(--red)}
+.sk .t{font-weight:800;text-align:center;background:var(--ink);color:#fff;border:0;border-radius:3px;padding:3px 0}
+.sk .t:hover{background:var(--red)}
+.sk span.n{text-align:center;color:var(--mute)}
+.sk.h{font-size:11px;color:var(--mute);background:none}
+.sk.dim .nm{color:var(--mute)}
+.atk{display:grid;grid-template-columns:1.4fr 1fr .6fr;gap:4px;padding:8px 10px;border-bottom:1px solid #e4dccd}
+.atk .r{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr) auto auto;gap:4px;align-items:center}
+.atk button{padding:4px 8px}
+.eq{display:grid;grid-template-columns:1fr 64px;gap:4px;margin-bottom:4px}
+#log{position:sticky;bottom:0;background:var(--ink);color:#fff;padding:8px 14px;font-size:14px;min-height:38px;max-height:130px;overflow:auto}
+#log div:first-child{color:#ffb4ac;font-weight:600}
+.warn{color:var(--red);font-weight:600}
+footer{text-align:center;color:var(--mute);font-size:12px;padding:10px}
+@media print{header,#log,button{display:none!important}body{background:#fff}section{box-shadow:none}}
+[hidden]{display:none!important}
+.wrap{max-width:1100px;margin:0 auto;padding:14px}
+nav{display:flex;gap:4px;margin-bottom:14px;border-bottom:3px solid var(--ink)}
+nav button{background:#d8cfbc;color:var(--ink);border-radius:4px 4px 0 0;font-weight:600}
+nav button.on{background:var(--ink);color:#fff}
+.q{font:600 19px Cinzel,serif;margin:0 0 10px}
+#hbar{display:flex;gap:8px;align-items:center}
+@media print{nav{display:none!important}}
+</style>
+</head>
+<body>
+<header><h1>Ficha de <b>Tormenta 20</b></h1><div id="hbar"></div></header>
+<div id="screen" class="wrap"></div>
+<div id="app" class="wrap" hidden>
+  <nav id="tabs"></nav>
+  <div id="pj"><div id="sheetbox" class="main"></div></div>
+  <div id="pm" hidden></div>
+  <div id="pi" hidden></div>
+</div>
+<div id="log"><div>Clique no total de uma perícia ou em Atacar para rolar.</div></div>
+<footer>Ficha não oficial. Tormenta20 é marca da Jambo Editora.</footer>
+
+<script>
+const AT=['FOR','DES','CON','INT','SAB','CAR'];
+// [PV inicial, PV por nível, PM por nível]
+const CL={Arcanista:[8,2,6],Bárbaro:[24,6,3],Bardo:[12,3,4],Bucaneiro:[16,4,3],Caçador:[16,4,4],Cavaleiro:[20,5,3],Clérigo:[16,4,5],Druida:[16,4,4],Guerreiro:[20,5,3],Inventor:[12,3,4],Ladino:[12,3,4],Lutador:[20,5,3],Nobre:[16,4,4],Paladino:[20,5,3]};
+// [bônus de Defesa, penalidade]
+const AR={Nenhuma:[0,0],Acolchoada:[1,0],Couro:[2,0],'Couro batido':[3,1],'Gibão de peles':[4,3],Brunea:[5,2],'Cota de malha':[6,2],'Loriga segmentada':[7,3],'Meia armadura':[8,4],Completa:[10,5]};
+const ES={Nenhum:[0,0],Leve:[1,1],Pesado:[2,2]};
+// nome, atributo, somente treinada, penalidade de armadura
+const SK=[['Acrobacia','DES',0,1],['Adestramento','CAR',1,0],['Atletismo','FOR',0,0],['Atuação','CAR',0,0],['Cavalgar','DES',0,0],['Conhecimento','INT',1,0],['Cura','SAB',0,0],['Diplomacia','CAR',0,0],['Enganação','CAR',0,0],['Fortitude','CON',0,0],['Furtividade','DES',0,1],['Guerra','INT',1,0],['Iniciativa','DES',0,0],['Intimidação','CAR',0,0],['Intuição','SAB',0,0],['Investigação','INT',0,0],['Jogatina','CAR',1,0],['Ladinagem','DES',1,1],['Luta','FOR',0,0],['Misticismo','INT',1,0],['Nobreza','INT',1,0],['Ofício (1)','INT',1,0],['Ofício (2)','INT',1,0],['Percepção','SAB',0,0],['Pilotagem','DES',1,0],['Pontaria','DES',0,0],['Reflexos','DES',0,0],['Religião','SAB',1,0],['Sobrevivência','SAB',0,0],['Vontade','SAB',0,0]];
+
+let S={},save=()=>{};
+const n=k=>parseInt(S[k])||0;
+const sg=v=>(v>=0?'+':'')+v;
+const $=s=>document.querySelector(s);
+const opts=(o,blank)=>(blank?'<option value=""></option>':'')+o.map(x=>`<option>${x}</option>`).join('');
+const inp=(k,l,t='text',x='')=>`<div><label>${l}</label><input data-k="${k}" type="${t}" ${x}></div>`;
+
+function render(){let h=`<div class="col">
+<section><h2>PERSONAGEM</h2><div class="in g g2">
+${inp('personagem','Personagem')}${inp('jogador','Jogador')}${inp('raca','Raça')}${inp('origem','Origem')}
+<div><label>Classe</label><select data-k="classe">${opts(Object.keys(CL),1)}</select></div>
+${inp('nivel','Nível','number','min="1" max="20" placeholder="1"')}
+${inp('divindade','Divindade')}${inp('xp','Pontos de experiência','number')}
+</div></section>
+
+<section><h2>ATRIBUTOS</h2><div class="in g g6">
+${AT.map(a=>`<div class="at"><b>${a}</b><input data-k="a_${a}" type="number" placeholder="0" aria-label="${a}"></div>`).join('')}
+</div></section>
+
+<section><h2>VIDA E MANA</h2><div class="in g g2">
+<div class="box"><small>Pontos de vida (máx <b id="pvm">0</b>)</small><input data-k="pv" type="number" placeholder="atuais"></div>
+<div class="box"><small>Pontos de mana (máx <b id="pmm">0</b>)</small><input data-k="pm" type="number" placeholder="atuais"></div>
+${inp('pvx','PV extras (poderes, itens)','number','placeholder="0"')}${inp('pmx','PM extras','number','placeholder="0"')}
+</div></section>
+
+<section><h2>DEFESA</h2><div class="in g g3">
+<div class="box"><small>Defesa</small><div class="big" id="def">10</div></div>
+<div class="box"><small>Penalidade de armadura</small><div class="big" id="pen">0</div></div>
+${inp('dout','Outros bônus','number','placeholder="0"')}
+<div><label>Armadura</label><select data-k="arm">${opts(Object.keys(AR))}</select></div>
+<div><label>Escudo</label><select data-k="esc">${opts(Object.keys(ES))}</select></div>
+<div class="box"><small>Armadura + escudo</small><b id="abn">0</b></div>
+</div></section>
+
+<section><h2>ATAQUES</h2>${[0,1,2,3,4].map(i=>`<div class="atk">
+<input data-k="an${i}" placeholder="Arma ou ataque" aria-label="Nome do ataque">
+<select data-k="ap${i}">${opts(['Luta','Pontaria'])}</select>
+<input data-k="ab${i}" type="number" placeholder="+0" aria-label="Bônus extra">
+<div class="r"><input data-k="ad${i}" placeholder="Dano 1d8+2"><input data-k="ac${i}" placeholder="Crít. 19, x2"><input data-k="at${i}" placeholder="Tipo"><input data-k="al${i}" placeholder="Alcance">
+<button onclick="atk(${i})">Atacar <span id="at_${i}"></span></button><button onclick="dmg(${i})">Dano</button></div></div>`).join('')}</section>
+
+<section><h2>PROFICIÊNCIAS, TAMANHO E DESLOCAMENTO</h2><div class="in g g3">
+${inp('tam','Tamanho','text','placeholder="Médio"')}${inp('desl','Deslocamento','text','placeholder="9m"')}
+<div class="box"><small>Treino na perícia</small><b id="tr">+2</b></div>
+</div><div class="in" style="padding-top:0"><textarea data-k="prof" placeholder="Proficiências: armas, armaduras, escudos..."></textarea></div></section>
+
+<section><h2>HABILIDADES, PODERES E MAGIAS</h2><div class="in g">
+<textarea data-k="hab" placeholder="Habilidades de raça, origem e classe; poderes"></textarea>
+<textarea data-k="mag" placeholder="Magias: nome, execução, alcance, duração, custo em PM"></textarea>
+</div></section>
+
+<section><h2>EQUIPAMENTO</h2><div class="in">
+${[...Array(12).keys()].map(i=>`<div class="eq"><input data-k="ei${i}" placeholder="Item" aria-label="Item"><input data-k="ew${i}" type="number" step="0.5" placeholder="Espaços" aria-label="Espaços"></div>`).join('')}
+<div id="carga" style="margin:6px 0"></div>
+<div class="g g2">${inp('din','Tibares (T$)','number')}${inp('milh','Tibares de ouro (TO)','number')}</div>
+</div></section>
+</div>
+
+<div class="col"><section><h2>PERÍCIAS</h2>
+<div class="sk h"><span></span><span>Treinada · Perícia</span><span>Total</span><span>½ nív</span><span>Atrib</span><span>Treino</span><span>Outros</span></div>
+${SK.map(([nm,a,so,pa],i)=>`<div class="sk" id="sk${i}"><input type="checkbox" data-k="tr${i}" aria-label="Treinada em ${nm}">
+<span class="nm">${nm}<small> ${a}${so?'*':''}${pa?'†':''}</small></span>
+<button class="t" onclick="rs(${i})" id="st${i}">0</button><span class="n" id="sh${i}"></span><span class="n" id="sa${i}"></span><span class="n" id="sr${i}"></span>
+<input data-k="so${i}" type="number" placeholder="0" aria-label="Outros ${nm}"></div>`).join('')}
+<div class="in"><small style="color:var(--mute)">* Somente treinada. † Sofre penalidade de armadura.</small></div></section>
+<section><h2>ANOTAÇÕES</h2><div class="in"><textarea data-k="notas" style="min-height:140px"></textarea></div></section></div>`;
+$('#sheetbox').innerHTML=h;}
+
+const T={}; // totais das perícias
+function calc(){
+  const lv=Math.max(1,n('nivel')),half=Math.floor(lv/2),tr=lv>=15?6:lv>=7?4:2;
+  const a=Object.fromEntries(AT.map(x=>[x,n('a_'+x)]));
+  const c=CL[S.classe],con=a.CON;
+  $('#pvm').textContent=(c?c[0]+con+(lv-1)*(c[1]+con):0)+n('pvx');
+  $('#pmm').textContent=(c?c[2]*lv:0)+n('pmx');
+  const ar=AR[S.arm]||[0,0],es=ES[S.esc]||[0,0],pen=ar[1]+es[1];
+  $('#abn').textContent=ar[0]+es[0];
+  $('#def').textContent=10+a.DES+ar[0]+es[0]+n('dout');
+  $('#pen').textContent=pen;$('#tr').textContent=sg(tr);
+  SK.forEach(([nm,at,so,pa],i)=>{
+    const t=S['tr'+i],v=half+a[at]+(t?tr:0)+n('so'+i)-(pa?pen:0);
+    T[nm]=v;$('#st'+i).textContent=sg(v);
+    $('#sh'+i).textContent=half;$('#sa'+i).textContent=a[at];$('#sr'+i).textContent=t?tr:0;
+    $('#sk'+i).classList.toggle('dim',!!so&&!t);
+  });
+  for(let i=0;i<5;i++)$('#at_'+i).textContent=sg((T[S['ap'+i]||'Luta']||0)+n('ab'+i));
+  let w=0;for(let i=0;i<12;i++)w+=parseFloat(S['ew'+i])||0;
+  const lim=10+2*a.FOR;
+  $('#carga').innerHTML=`Espaços: ${w} / ${lim} `+(w>lim?'<span class="warn">Sobrecarregado: −5 em Defesa e perícias com penalidade, deslocamento −3m</span>':'');
+}
+function bind(){document.querySelectorAll('#sheetbox [data-k]').forEach(e=>{
+  const k=e.dataset.k;
+  if(S[k]===undefined&&e.tagName=='SELECT'&&e.options.length&&e.options[0].value!=='')S[k]=e.value;
+  if(e.type=='checkbox')e.checked=!!S[k];else if(S[k]!==undefined)e.value=S[k];
+  e.addEventListener('input',()=>{S[k]=e.type=='checkbox'?e.checked:e.value;save();calc()});
+});
+}
+function log(t){const l=$('#log');l.insertAdjacentHTML('afterbegin',`<div>${t}</div>`);while(l.children.length>6)l.lastChild.remove()}
+const d=x=>1+Math.floor(Math.random()*x);
+function rs(i){const [nm,,so]=SK[i],v=T[nm],r=d(20);
+  log(`${nm}: d20 (${r}) ${sg(v)} = <b>${r+v}</b>${r==20?' · 20 natural':r==1?' · 1 natural':''}${so&&!S['tr'+i]?' · não treinada: exige treino':''}`)}
+function atk(i){const v=(T[S['ap'+i]||'Luta']||0)+n('ab'+i),r=d(20),m=/(\d+)\s*[\/,;]/.exec(S['ac'+i]||''),th=m?+m[1]:20;
+  log(`${S['an'+i]||'Ataque'}: d20 (${r}) ${sg(v)} = <b>${r+v}</b>${r>=th?' · ameaça de crítico':''}${r==1?' · falha natural':''}`)}
+function dmg(i){const e=S['ad'+i]||'',m=/(\d+)\s*d\s*(\d+)\s*([+-]\s*\d+)?/.exec(e);
+  if(!m)return log('Informe o dano no formato 1d8+2');
+  const rs=[...Array(+m[1])].map(()=>d(+m[2])),b=m[3]?parseInt(m[3].replace(/\s/g,'')):0,x=/x\s*(\d+)/i.exec(S['ac'+i]||'');
+  const tot=rs.reduce((a,b)=>a+b,0)+b;
+  log(`${S['an'+i]||'Dano'}: [${rs.join(', ')}] ${b?sg(b):''} = <b>${tot}</b>${x?` · crítico (x${x[1]}): <b>${tot*x[1]}</b>`:''}`)}
+
+// ===== Aplicação: login, criação, abas =====
+const RACAS=['Humano','Anão','Dahllan','Elfo','Goblin','Golem','Hynne','Kliren','Lefou','Medusa','Minotauro','Osteon','Qareen','Sereia/Tritão','Silfide','Suraggel','Trog'];
+const DIV=['Sem divindade','Aharadak','Allihanna','Arsenal','Azgher','Hyninn','Kallyadranoch','Khalmyr','Lena','Lin-Wu','Marah','Megalokk','Nimb','Oceano','Sszzaas','Tanna-Toh','Tenebra','Thwor','Thyatis','Valkaria','Wynna'];
+const CUSTO={'-1':-1,0:0,1:1,2:2,3:4,4:7};
+let AUTH,ITEMS=[],FICH=[],ALVO=null,MESTRE=false,ST,IT={};
+const W={n:'',lv:1,raca:'',cl:'',og:'',dv:'Sem divindade',p:0,a:{},r:{}};
+AT.forEach(x=>{W.a[x]=0;W.r[x]=0});
+const api=async o=>{
+  const r=await fetch('/.netlify/functions/api',{method:'POST',body:JSON.stringify({...AUTH,...o})});
+  const j=await r.json().catch(()=>({erro:'Servidor indisponível. Confira se as funções da Netlify estão publicadas.'}));
+  if(!r.ok)throw j.erro||'Erro';return j};
+const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const mount=()=>{render();bind();calc()};
+const ghost='style="color:var(--ink);border-color:var(--ink)"';
+
+function login(m){
+  const c=m=='criar';
+  $('#app').hidden=true;$('#hbar').innerHTML='';
+  $('#screen').innerHTML=`<section style="max-width:400px;margin:40px auto"><h2>${c?'CRIAR CONTA':'ENTRAR'}</h2><div class="in g">
+  <div><label>Nome do jogador${c?'':' (o mestre entra como "mestre")'}</label><input id="lu" autocomplete="username"></div>
+  <div><label>Senha${c?' (mínimo 4 caracteres)':''}</label><input id="lp" type="password" autocomplete="${c?'new-password':'current-password'}"></div>
+  ${c?'<div><label>Repita a senha</label><input id="lp2" type="password" autocomplete="new-password"></div>':''}
+  <button id="lg">${c?'Criar conta':'Entrar'}</button><div class="warn" id="le" role="alert"></div>
+  <button class="ghost" ${ghost} onclick="login('${c?'entrar':'criar'}')">${c?'Já tenho conta':'Criar conta'}</button></div></section>`;
+  $('#lg').onclick=async()=>{
+    if(c&&$('#lp').value!==$('#lp2').value)return $('#le').textContent='As senhas não conferem.';
+    AUTH={user:$('#lu').value,pin:$('#lp').value};
+    try{const j=await api({act:c?'registrar':'login'});MESTRE=!!j.mestre;ITEMS=j.itens;S=j.sheet||{};
+      save=()=>{clearTimeout(ST);ST=setTimeout(()=>api({act:'save',sheet:S,alvo:ALVO}).catch(e=>log('Erro ao salvar: '+e)),600)};
+      (MESTRE||S.raca)?app():wiz()}
+    catch(e){$('#le').textContent=e}}}
+
+function app(){
+  $('#screen').innerHTML='';$('#app').hidden=false;
+  $('#hbar').innerHTML=`${esc(AUTH.user)} <button class="ghost" onclick="location.reload()">Sair</button>`;
+  const TB=[['pj','Jogador']];if(MESTRE)TB.push(['pm','Mestre']);TB.push(['pi','Itens']);
+  $('#tabs').innerHTML=TB.map(([i,t])=>`<button data-t="${i}" onclick="tab('${i}')">${t}</button>`).join('');
+  if(MESTRE)$('#sheetbox').innerHTML='<p class="in">Abra uma ficha na aba Mestre.</p>';else mount();
+  tab(MESTRE?'pm':'pj')}
+function tab(id){
+  ['pj','pm','pi'].forEach(x=>{const e=$('#'+x);if(e)e.hidden=x!=id});
+  document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t==id));
+  if(id=='pm')lista();if(id=='pi')itens()}
+
+// ----- Mestre -----
+async function lista(){
+  try{FICH=(await api({act:'list'})).fichas}catch(e){return log(e)}
+  $('#pm').innerHTML=`<section><h2>FICHAS DOS JOGADORES</h2><div class="in">${FICH.length?FICH.map((f,i)=>`<div class="eq" style="grid-template-columns:1fr auto auto"><span><b>${esc(f.sheet.personagem||'(sem ficha ainda)')}</b>, jogador ${esc(f.nome)}. ${esc(f.sheet.raca||'')} ${esc(f.sheet.classe||'')} ${esc(f.sheet.nivel||'')}</span><button onclick="abrir(${i})">Abrir</button><button class="ghost" style="color:var(--red);border-color:var(--red)" onclick="apagar(${i})">Apagar</button></div>`).join(''):'Nenhum jogador cadastrado ainda.'}</div></section>`}
+function abrir(i){ALVO=FICH[i].nome;S=FICH[i].sheet;mount();tab('pj')}
+async function apagar(i){if(!confirm('Apagar a ficha de '+FICH[i].nome+'?'))return;await api({act:'del',alvo:FICH[i].nome}).catch(log);lista()}
+
+// ----- Itens -----
+function img(f){return new Promise(r=>{const i=new Image();i.onload=()=>{const c=document.createElement('canvas'),k=Math.min(1,220/Math.max(i.width,i.height));c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);r(c.toDataURL('image/jpeg',.8))};i.src=URL.createObjectURL(f)})}
+async function itens(){try{ITEMS=(await api({act:'itens'})).itens}catch(e){log(e)}drawItens()}
+function drawItens(){
+  const f=MESTRE?`<section><h2>${IT.id?'EDITAR ITEM':'NOVO ITEM'}</h2><div class="in g g2">
+  <div><label>Nome</label><input id="i_n" value="${esc(IT.nome)}"></div>
+  <div><label>Tipo</label><input id="i_t" value="${esc(IT.tipo)}" placeholder="Arma, poção, relíquia"></div>
+  <div><label>Espaços</label><input id="i_e" type="number" step="0.5" value="${esc(IT.esp)}"></div>
+  <div><label>Preço (T$)</label><input id="i_p" value="${esc(IT.preco)}"></div>
+  <div style="grid-column:1/-1"><label>Aparência</label><textarea id="i_a">${esc(IT.aparencia)}</textarea></div>
+  <div style="grid-column:1/-1"><label>Descrição e efeitos</label><textarea id="i_d">${esc(IT.desc)}</textarea></div>
+  <div><label>Imagem</label><input id="i_i" type="file" accept="image/*">${IT.img?`<img src="${IT.img}" height="60" alt="">`:''}</div>
+  <label style="display:flex;gap:6px;align-items:end"><input id="i_v" type="checkbox" style="width:auto" ${IT.visivel?'checked':''}> Visível aos jogadores</label>
+  <button onclick="salvarIt()">Salvar item</button><button class="ghost" ${ghost} onclick="IT={};drawItens()">Limpar</button></div></section>`:'';
+  $('#pi').innerHTML=f+`<div class="g" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr));margin-top:14px">`+(ITEMS.map(x=>`<section><div class="in">${x.img?`<img src="${x.img}" alt="${esc(x.nome)}" style="width:100%;max-height:180px;object-fit:contain;background:#fff;border:1px solid #bbb0a2;border-radius:3px">`:''}<h3 style="font-family:Cinzel,serif;margin:8px 0 2px">${esc(x.nome)}</h3><small style="color:var(--mute)">${esc(x.tipo)}${x.esp?', '+esc(x.esp)+' espaço(s)':''}${x.preco?', T$ '+esc(x.preco):''}${MESTRE&&!x.visivel?', oculto dos jogadores':''}</small>${x.aparencia?`<p><i>${esc(x.aparencia)}</i></p>`:''}<p>${esc(x.desc)}</p>${MESTRE?`<button onclick="edi(${x.id})">Editar</button> <button class="ghost" style="color:var(--red);border-color:var(--red)" onclick="rem(${x.id})">Excluir</button>`:''}</div></section>`).join('')||'<p>
